@@ -5,7 +5,10 @@ import java.io.File;
 
 public class TestXML {
 
+
+
     public static void main(String[] args) {
+
         try {
             // 1. Create a new instance of the DocumentBuilderFactory
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -25,6 +28,7 @@ public class TestXML {
 
             // 6. Loop through the game elements and access the 'gamecode' attribute
             for (int i = 0; i < gameList.getLength(); i++) {
+                String[] boardCards = new String[5];
                 Node gameNode = gameList.item(i);
 
                 // Check if the node is an element
@@ -46,9 +50,55 @@ public class TestXML {
                             Element cardsElement = (Element) roundElement.getElementsByTagName("cards").item(0);
                             String flopCards = cardsElement.getTextContent();
                             System.out.println("Flopcards: " + flopCards);
+                            String[] cards = flopCards.split(" ");
+                            int index = 0;
+                            for (String card : cards) {
+                                // Extrahiere den Kartenwert
+                                String value = card.substring(1); // Die Karte ohne den ersten Buchstaben (z.B. H, C)
+                                // Behandle die 10 separat, um sicherzustellen, dass sie als "T" gespeichert wird
+                                if (value.equals("10")) {
+                                    value = "T";
+                                }
+                                char suite = card.charAt(0);
+                                value += Character.toLowerCase(suite);
+                                boardCards[index] = value;
+                                index++;
+                                if (index >= boardCards.length) break; // Sicherheitshalber verhindern, dass das Array überschrieben wird
+                            }
+                            
+                        }
+                        if ("3".equals(roundElement.getAttribute("no"))) {
+                            Element cardsElement = (Element) roundElement.getElementsByTagName("cards").item(0);
+                            String turnCard = cardsElement.getTextContent();
+                            System.out.println("Turncard: " + turnCard);
+                            String value = turnCard.substring(1); // Die Karte ohne den ersten Buchstaben (z.B. H, C)
+                            // Behandle die 10 separat, um sicherzustellen, dass sie als "T" gespeichert wird
+                            if (value.equals("10")) {
+                                value = "T";
+                            }
+                            char suite = turnCard.charAt(0);
+                            value += Character.toLowerCase(suite);
+                            boardCards[3] = value;
+                        }
+                        if ("4".equals(roundElement.getAttribute("no"))) {
+                            Element cardsElement = (Element) roundElement.getElementsByTagName("cards").item(0);
+                            String riverCard = cardsElement.getTextContent();
+                            System.out.println("Rivercard: " + riverCard);
+                            String value = riverCard.substring(1); // Die Karte ohne den ersten Buchstaben (z.B. H, C)
+                            // Behandle die 10 separat, um sicherzustellen, dass sie als "T" gespeichert wird
+                            if (value.equals("10")) {
+                                value = "T";
+                            }
+                            char suite = riverCard.charAt(0);
+                            value += Character.toLowerCase(suite);
+                            boardCards[4] = value;
                         }
 
                     }
+
+                }
+                for (int a = 0; a < boardCards.length; a++) {
+                    System.out.println(boardCards[a]);
                 }
             }
         } catch (Exception e) {

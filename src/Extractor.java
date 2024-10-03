@@ -33,15 +33,7 @@ public class Extractor {
         public String UTG1;
         public String UTG2;
 
-        public double ljStack;
-        public double hjStack;
-        public double coStack;
-        public double btnStack;
-        public double sbStack;
-        public double bbStack;
-        public double utgStack;
-        public double utg1Stack;
-        public double utg2Stack;
+
         public PokerHand(String handNumber) {
             this.handNumber = handNumber;
             this.boardCards = new String[5];
@@ -81,6 +73,19 @@ public class Extractor {
                     // Create a new PokerHand object with gameCode
                     PokerHand hand = new PokerHand(gameCode);
                     //hand.boardCards = gameElement.getChildNodes().
+                    NodeList roundList = gameElement.getElementsByTagName("round");
+                    for (int j = 0; j < roundList.getLength(); j++) {
+                        Element roundElement = (Element) roundList.item(j);
+
+                        // Überprüfen, ob es sich um Runde no="2" (Flop) handelt
+                        if ("2".equals(roundElement.getAttribute("no"))) {
+                            // 6. Zugriff auf das <cards> Element in der Runde
+                            Element cardsElement = (Element) roundElement.getElementsByTagName("cards").item(0);
+                            String flopCards = cardsElement.getTextContent();
+                            System.out.println("Flopcards: " + flopCards);
+                        }
+
+                    }
                 }
             }
         } catch (Exception e) {
