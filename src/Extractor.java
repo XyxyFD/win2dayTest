@@ -11,7 +11,6 @@ public class Extractor {
     public static class PokerHand {
         public String blinds;
         public String handNumber;
-        public String[] holeCards;
         public String[] boardCards;
 
         public List<String> preflopAction;
@@ -45,7 +44,6 @@ public class Extractor {
         public double utg2Stack;
         public PokerHand(String handNumber) {
             this.handNumber = handNumber;
-            this.holeCards = new String[2];
             this.boardCards = new String[5];
             this.actions = new ArrayList<>();
             this.preflopAction = new ArrayList<>();
@@ -82,19 +80,7 @@ public class Extractor {
 
                     // Create a new PokerHand object with gameCode
                     PokerHand hand = new PokerHand(gameCode);
-
-                    /*// Example: Extract smallBlind and bigBlind
-                    hand.smallBlind = doc.getElementsByTagName("smallblind").item(0).getTextContent();
-                    hand.bigBlind = doc.getElementsByTagName("bigblind").item(0).getTextContent();
-
-                    // Output the extracted data
-                    System.out.println("Game Code: " + hand.gameCode);
-                    System.out.println("Small Blind: " + hand.smallBlind);
-                    System.out.println("Big Blind: " + hand.bigBlind);
-
-                    // Continue processing other elements like players, actions, etc.
-
-                     */
+                    //hand.boardCards = gameElement.getChildNodes().
                 }
             }
         } catch (Exception e) {

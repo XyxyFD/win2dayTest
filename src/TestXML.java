@@ -36,6 +36,19 @@ public class TestXML {
 
                     // 8. Print or store the gamecode
                     System.out.println("Gamecode: " + gameCode);
+                    NodeList roundList = gameElement.getElementsByTagName("round");
+                    for (int j = 0; j < roundList.getLength(); j++) {
+                        Element roundElement = (Element) roundList.item(j);
+
+                        // Überprüfen, ob es sich um Runde no="2" (Flop) handelt
+                        if ("2".equals(roundElement.getAttribute("no"))) {
+                            // 6. Zugriff auf das <cards> Element in der Runde
+                            Element cardsElement = (Element) roundElement.getElementsByTagName("cards").item(0);
+                            String flopCards = cardsElement.getTextContent();
+                            System.out.println("Flopcards: " + flopCards);
+                        }
+
+                    }
                 }
             }
         } catch (Exception e) {
