@@ -65,7 +65,7 @@ public class TestXML {
                                 index++;
                                 if (index >= boardCards.length) break; // Sicherheitshalber verhindern, dass das Array überschrieben wird
                             }
-                            
+
                         }
                         if ("3".equals(roundElement.getAttribute("no"))) {
                             Element cardsElement = (Element) roundElement.getElementsByTagName("cards").item(0);
