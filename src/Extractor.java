@@ -11,9 +11,7 @@ import java.util.regex.Pattern;
 
 public class Extractor {
 
-    // Define the PokerHand class with gameCode (as an example)
-
-
+    private static String blinds = "Blinds not defined";
     public static List<PokerHand> extract(String filePath) {
         List<PokerHand> pokerHands = new ArrayList<>(); // Liste für PokerHand-Objekte
 
@@ -24,6 +22,7 @@ public class Extractor {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
             doc.getDocumentElement().normalize();
+            blinds = extractBlindsFromGametype(extractBlinds(doc));
 
             // Extracting game elements from the XML
             NodeList gameList = doc.getElementsByTagName("game");
@@ -37,10 +36,12 @@ public class Extractor {
 
                     // Extract gamecode from the XML
                     String gameCode = gameElement.getAttribute("gamecode");
+                    System.out.println(gameCode);
 
                     // Create a new PokerHand object with gameCode
                     PokerHand hand = new PokerHand(gameCode);
-                    hand.blinds = extractBlindsFromGametype(extractBlinds(doc));
+                    extractPositionByPlayername(gameElement, hand);
+                    hand.blinds = blinds;
                     System.out.println(hand.blinds);
                     pokerHands.add(hand);
                     NodeList roundList = gameElement.getElementsByTagName("round");
@@ -128,6 +129,37 @@ public class Extractor {
             return "Keine Blinds gefunden";
         }
     }
+    public static void extractPositionByPlayername(Element gameElement, PokerHand hand) {
+        NodeList roundList = gameElement.getElementsByTagName("round");
+
+        // Schleife durch alle Runden (round), um die Aktionen zu analysieren
+        for (int i = 0; i < roundList.getLength(); i++) {
+            Element roundElement = (Element) roundList.item(i);
+
+            // Wir suchen nach der Preflop-Runde (round no="0"), in der die Blinds gesetzt werden
+            if ("0".equals(roundElement.getAttribute("no"))) {
+                NodeList actionList = roundElement.getElementsByTagName("action");
+
+                // Schleife durch alle Aktionen in der Preflop-Runde
+                for (int j = 0; j < actionList.getLength(); j++) {
+                    Element actionElement = (Element) actionList.item(j);
+
+                    // Extrahiere den Small Blind (action no="1")
+                    if ("1".equals(actionElement.getAttribute("no"))) {
+                        String smallBlindPlayer = actionElement.getAttribute("player");
+                        hand.SB = smallBlindPlayer; // Setze den Spieler als Small Blind
+                    }
+
+                    // Extrahiere den Big Blind (action no="2")
+                    if ("2".equals(actionElement.getAttribute("no"))) {
+                        String bigBlindPlayer = actionElement.getAttribute("player");
+                        hand.BB = bigBlindPlayer; // Setze den Spieler als Big Blind
+                    }
+                }
+            }
+        }
+    }
+
 
 
     // Main method to run the extraction
@@ -137,4 +169,6 @@ public class Extractor {
         extract(filePath);
 
     }
+
+
 }
