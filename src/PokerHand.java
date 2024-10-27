@@ -37,6 +37,25 @@ public  class PokerHand {
         this.riverAction = new ArrayList<>();
     }
 
-
-    // Add other properties and methods as needed
+    @Override
+    public String toString() {
+        return "PokerHand{" +
+                "blinds='" + blinds + '\'' +
+                ", handNumber='" + handNumber + '\'' +
+                ", boardCards=" + Arrays.toString(boardCards) +
+                ", preflopAction=" + preflopAction +
+                ", flopAction=" + flopAction +
+                ", turnAction=" + turnAction +
+                ", riverAction=" + riverAction +
+                ", maxPlayers='" + maxPlayers + '\'' +
+                ", btnSeat='" + btnSeat + '\'' +
+                ", LJ='" + LJ + '\'' +
+                ", HJ='" + HJ + '\'' +
+                ", CO='" + CO + '\'' +
+                ", BTN='" + BTN + '\'' +
+                ", SB='" + SB + '\'' +
+                ", BB='" + BB + '\'' +
+                '}';
+    }
+// Add other properties and methods as needed
 }
